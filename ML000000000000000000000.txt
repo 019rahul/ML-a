@@ -1,0 +1,264 @@
+
+Praticel no 1 
+aim :-: Implement simple linear regression model on a standard data set
+and plot the least square regression fit. Comment on the result
+====================
+
+# Load the dataset
+data(iris)
+
+# Inspect the dataset
+head(iris)
+
+# Fit simple linear regression model
+lm_model <- lm(Petal.Length ~ Petal.Width, data = iris)
+
+# Summary of the model
+summary(lm_model)
+
+# Plot the least squares regression fit
+plot(iris$Petal.Width, iris$Petal.Length,
+     xlab = "Petal Width", ylab="Petal Length",
+     main = "Simple Linear Regression Fit")
+abline(lm_model, col = "red") # Add regression line
+
+====================================================================================================================
+Praticel no 4  aim :-Fit a classification model using K Nearest Neighbour(KNN)
+Algorithm on a given data set.
+====================================================================
+
+# Load the required library
+  library(class)
+# Load the iris dataset
+data(iris)
+# Split the dataset into training and testing sets
+set.seed(123)
+train_indices <- sample(1:nrow(iris), 0.7 * nrow(iris))
+train_data <- iris[train_indices, ]
+test_data <- iris[-train_indices, ]
+# Fit the KNN model
+k <- 3 # Choose the number of neighbors
+knn_model <- knn(train = train_data[, -5], test = test_data[, -5], cl =
+                   train_data$Species, k = k)
+# Evaluate the model
+accuracy <- sum(knn_model == test_data$Species) / nrow(test_data)
+print(paste("Accuracy of KNN model with k =", k, ":", accuracy))
+
+==================================================================================================================
+
+praticel no 10 aim :- Perform the following on the given data set:
+1) Hierarchical clustering
+=================================
+
+# Load the dataset
+data(mtcars)
+
+# Select subset of variables for clustering (if needed)
+# For example, let's select 'mpg', 'disp', and 'hp'
+subset_data <- mtcars[, c('mpg', 'disp', 'hp')]
+
+# Perform hierarchical clustering
+dist_matrix <- dist(subset_data) # Calculate distance matrix
+hclust_result <- hclust(dist_matrix) # Perform hierarchical clustering
+
+# Plot the dendrogram
+plot(hclust_result, hang = -1, main = "Dendrogram of Hierarchical Clustering", cex = 0.6)
+
+===================================================================================================================
+
+praticel no 2 aim :-: Implement multiple regression model on a standard data set and
+plot the least square regression fit.comment on the result.
+==========================================================================
+data(mtcars)
+# Fit multiple linear regression model
+lm_model <- lm(mpg ~ cyl + disp + hp + wt, data = mtcars)
+# Summary of the model
+summary(lm_model)
+# Predictions
+predicted_mpg <- predict(lm_model)
+# Plot the least squares regression fit
+plot(mtcars$mpg, predicted_mpg, xlab = "Actual mpg", ylab = "Predicted
+mpg", main = "Multiple Linear Regression Fit")
+abline(lm_model, col = "red") # Add regression line
+===================================================================================
+Praticel no 3 aim:-fit a classification model using following:
+(i) Quadratic Discriminant Analysis(QDA)
+On a standard data set and comp
+========================================================================
+
+# Load required library
+library(MASS)
+# Load a standard dataset (e.g., iris dataset)
+data(iris)
+# Split the dataset into training and testing sets
+set.seed(123)
+train_indices <- sample(1:nrow(iris), 0.7*nrow(iris))
+train_data <- iris[train_indices, ]
+test_data <- iris[-train_indices, ]
+# Fit Quadratic Discriminant Analysis (QDA) model
+qda_model <- qda(Species ~ ., data = train_data)
+# Predictions on test data using QDA model
+qda_predictions <- predict(qda_model, newdata = test_data)
+# Calculate accuracy of QDA model
+qda_accuracy <- sum(qda_predictions$class == test_data$Species) /
+  nrow(test_data)
+# Print QDA model accuracy
+print(paste("QDA Model Accuracy:", qda_accuracy))
+# Fit Logistic Regression model
+# Assuming you have already fitted a logistic regression model
+(log_reg_model) on the same training data
+log_reg_model <- glm(Species ~ ., data = train_data, family = binomial)
+# Predictions on test data using logistic regression model
+log_reg_predictions <- predict(log_reg_model, newdata = test_data, type = "response")
+# Convert predicted probabilities to class labels
+log_reg_classes <- ifelse(log_reg_predictions > 0.5, "versicolor", "non- versicolor")
+# Calculate accuracy of logistic regression model
+log_reg_accuracy <- sum(log_reg_classes == test_data$Species) /
+  nrow(test_data)
+# Print logistic regression model accuracy
+print(paste("Logistic Regression Model Accuracy:", log_reg_accuracy))
+=================================================================================
+praticel no 5 Aim:-Use boostrap to give an estimate of a given statistic
+==================================================================================
+# Sample data (replace this with your own dataset)
+data <- c(23, 45, 67, 34, 56, 78, 90, 12, 45, 67)
+# Number of bootstrap samples
+num_bootstraps <- 1000
+# Function to compute mean
+compute_mean <- function(x) {
+  return(mean(x))
+  25
+}
+# Initialize vector to store bootstrap sample means
+bootstrap_means <- numeric(num_bootstraps)
+# Perform bootstrap resampling
+for (i in 1:num_bootstraps) {
+  # Generate bootstrap sample with replacement
+  bootstrap_sample <- sample(data, replace = TRUE)
+  # Compute mean of bootstrap sample
+  bootstrap_means[i] <- compute_mean(bootstrap_sample)
+}
+# Compute the estimate of the mean
+mean_estimate <- mean(bootstrap_means)
+# Compute a 95% confidence interval
+confidence_interval <- quantile(bootstrap_means, c(0.025, 0.975))
+# Print the results
+print(paste("Bootstrap estimate of mean:", mean_estimate))
+print(paste("95% Confidence interval:", confidence_interval))
+==========================================================================================
+praticel no 6 aim:- : For a given set,split the data into two training and testing and fit
+the following on the training set:
+1) PCR Model
+2) PLS Model
+Report test errors obtained in each case and compare the results
+=================================================================================
+install.packages("pls")
+# Load libraries
+library(pls)
+library(MASS)
+# Load dataset
+data(Boston)
+# Split the dataset into training and testing sets
+set.seed(123) # for reproducibility
+train_index <- sample(1:nrow(Boston), 0.7 * nrow(Boston)) # 70% for
+training
+train_data <- Boston[train_index, ]
+test_data <- Boston[-train_index, ]
+# Fit a PCR model on the training set
+pcr_model <- pcr(medv ~ ., data = train_data, scale = TRUE, validation ="CV")
+# Fit a PLS model on the training set
+pls_model <- plsr(medv ~ ., data = train_data, scale = TRUE, validation ="CV")
+# Evaluate PCR model on the testing set
+test_pred_pcr <- predict(pcr_model, newdata = test_data)
+rmse_pcr <- sqrt(mean((test_pred_pcr - test_data$medv)^2))
+cat("PCR Model Test Error (RMSE):", rmse_pcr, "\n")
+# Evaluate PLS model on the testing set
+test_pred_pls <- predict(pls_model, newdata = test_data)
+rmse_pls <- sqrt(mean((test_pred_pls - test_data$medv)^2))
+32
+cat("PLS Model Test Error (RMSE):", rmse_pls, "\n")
+summary(pcr_model)
+summary(pls_model)
+================================================================================
+praticel no 7 aim:-for a given data sets,perform the following:
+1) fit a step function and perform cross validation to choose the
+optimal number of cuts.make a plot of the fit to the data
+==================================================================================
+install.packages("segmented")
+library(segmented)
+library(ggplot2) # for plotting (optional)
+# Load dataset
+data(warpbreaks)
+# Convert 'wool' factor to numeric
+warpbreaks$wool <- as.numeric(warpbreaks$wool)
+# Define predictor and response variables
+x <- warpbreaks$breaks
+y <- warpbreaks$wool
+# Perform k-fold cross-validation to choose the optimal number of cuts
+set.seed(123) # for reproducibility
+cv_results <- rep(NA, 10) # Initialize vector to store cross-validation
+results
+for (i in 1:10) {
+  fold_indices <- sample(1:10, nrow(warpbreaks), replace = TRUE)
+  cv_results[i] <- mean(sapply(1:10, function(k) {
+    train_data <- warpbreaks[fold_indices != k, ]
+    test_data <- warpbreaks[fold_indices == k, ]
+    model <- segmented(lm(wool ~ breaks, data = train_data), seg.Z =
+                         ~breaks)
+    predictions <- predict(model, newdata = test_data)
+    mean((predictions - test_data$wool)^2)
+  }))
+}
+# Choose the optimal number of cuts with the lowest mean squared
+error
+optimal_cuts <- which.min(cv_results)
+cat("Optimal number of cuts chosen:", optimal_cuts, "\n")
+# Fit the step function with the optimal number of cuts
+step_model <- segmented(lm(wool ~ breaks, data = warpbreaks), seg.Z =
+                          ~breaks, control = seg.control(quant = TRUE))
+# Plot the fit to the data
+plot(step_model, main = "Step Function Fit to Warpbreaks Data")
+=================================================================================================
+praticel no 8 Aim :- : for a given data set,do the following
+1) Fit a regressio tree
+============================================================================================
+install.packages("rpart.plot")
+# Load libraries
+library(rpart)
+library(rpart.plot)
+# Load dataset (You can replace this with your own dataset)
+data(mtcars)
+# Fit a regression tree with larger size
+model <- rpart(mpg ~ ., data = mtcars, control = rpart.control(maxdepth = 5, minsplit = 10))
+# Visualize the tree
+rpart.plot(model, main = "Regression Tree with Larger Size")
+==================================================================================================
+praticel no 9 Aim :- For a given data set,split the data set into training set and
+testing .Fit the following models on the training set and evaluate the
+performance on the test set:
+1) Random Forest
+=============================================================================================== 
+# Load libraries
+library(randomForest)
+library(caret)
+# Load dataset (replace 'iris' with your dataset)
+data(iris)
+# Split data into training and testing sets
+set.seed(123) # for reproducibility
+trainIndex <- createDataPartition(iris$Species, p = 0.7, list = FALSE)
+trainData <- iris[trainIndex, ]
+testData <- iris[-trainIndex, ]
+# Fit Random Forest model
+model <- randomForest(Species ~ ., data = trainData)
+# Make predictions on the test set
+predictions <- predict(model, testData)
+# Evaluate model performance
+conf_matrix <- confusionMatrix(predictions, testData$Species)
+print(conf_matrix)
+
+
+
+
+
+
+
